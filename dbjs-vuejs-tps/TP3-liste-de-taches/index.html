@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TP3 - Gestion de tâches</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 640px; margin: 40px auto; color: #1b2430; }
+    .filters { display: flex; gap: 8px; margin: 16px 0; }
+    .filters button { padding: 6px 14px; border: 1px solid #c9cfd6; background: #fff; border-radius: 6px; cursor: pointer; }
+    .filters button.active { background: #2f8f66; border-color: #2f8f66; color: #fff; }
+    .task { border: 1px solid #dde1d9; border-radius: 8px; padding: 12px 16px; margin-bottom: 10px; }
+    .task.done { background: #f0f6f2; }
+    .task.done h3 { text-decoration: line-through; color: #6b7480; }
+    .task h3 { margin: 0 0 4px; }
+    .task p { margin: 0 0 8px; }
+    .status { font-size: 12px; padding: 2px 8px; border-radius: 999px; background: #fbf6e6; color: #8a6d12; }
+    .task.done .status { background: #e6f2ec; color: #1f6b4b; }
+    .error { color: #b3261e; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <task-list></task-list>
+  </div>
+
+  <script>
+    // Composant TaskList : responsable de l'affichage et de la gestion des tâches
+    const TaskList = {
+      name: 'TaskList',
+      template: `
+        <section>
+          <h1>Mes tâches</h1>
+
+          <!-- Computed property : nombre total de tâches -->
+          <p>Total : <strong>{{ totalTasks }}</strong> tâche(s) —
+             à faire : {{ remainingCount }}</p>
+
+          <!-- Filtres : v-bind (:class) pour lier dynamiquement la classe CSS "active" -->
+          <div class="filters">
+            <button :class="{ active: filter === 'all' }" @click="filter = 'all'">Toutes</button>
+            <button :class="{ active: filter === 'todo' }" @click="filter = 'todo'">À faire</button>
+            <button :class="{ active: filter === 'done' }" @click="filter = 'done'">Terminées</button>
+          </div>
+
+          <p v-if="error" class="error">{{ error }}</p>
+          <p v-else-if="loading">Chargement...</p>
+
+          <!-- Affichage : v-for + :key -->
+          <div class="task" v-for="task in filteredTasks" :key="task.id" :class="{ done: task.completed }">
+            <h3>{{ task.title }} <span class="status">{{ task.completed ? 'Terminée' : 'À faire' }}</span></h3>
+            <p>{{ task.description }}</p>
+
+            <!-- v-show : bouton visible seulement si la tâche n'est pas terminée -->
+            <button v-show="!task.completed" @click="markAsCompleted(task)">Marquer comme terminée</button>
+          </div>
+
+          <p v-if="!loading && !error && filteredTasks.length === 0">Aucune tâche à afficher.</p>
+        </section>
+      `,
+      data() {
+        return { tasks: [], filter: 'all', loading: true, error: '' }
+      },
+      computed: {
+        totalTasks() {
+          return this.tasks.length
+        },
+        remainingCount() {
+          return this.tasks.filter(t => !t.completed).length
+        },
+        filteredTasks() {
+          if (this.filter === 'todo') return this.tasks.filter(t => !t.completed)
+          if (this.filter === 'done') return this.tasks.filter(t => t.completed)
+          return this.tasks
+        }
+      },
+      methods: {
+        markAsCompleted(task) {
+          task.completed = true
+        }
+      },
+      // Chargement des données depuis le fichier JSON
+      mounted() {
+        fetch('taskList.json')
+          .then(r => {
+            if (!r.ok) throw new Error('HTTP ' + r.status)
+            return r.json()
+          })
+          .then(data => { this.tasks = data })
+          .catch(() => {
+            this.error = "Impossible de charger taskList.json (ouvrez la page via un serveur local, pas en file://)."
+          })
+          .finally(() => { this.loading = false })
+      }
+    }
+
+    Vue.createApp({ components: { TaskList } }).mount('#app')
+  </script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "jobs": [
+    { "id": 1, "title": "Développeur Vue.js", "company": "TechSafi", "type": "CDI", "location": "Safi", "salary": 9000, "experience": 2, "createdAt": "2026-09-14", "description": "Développement d'interfaces web avec Vue 3, Vue Router et Pinia." },
+    { "id": 2, "title": "Développeur Backend Node.js", "company": "AtlasSoft", "type": "CDI", "location": "Casablanca", "salary": 11000, "experience": 3, "createdAt": "2026-09-20", "description": "Conception d'API REST avec Node.js et Express, bases de données SQL et NoSQL." },
+    { "id": 3, "title": "Stagiaire Data Analyst", "company": "DataMaroc", "type": "Stage", "location": "Marrakech", "salary": 3000, "experience": 0, "createdAt": "2026-10-02", "description": "Analyse de données, tableaux de bord et reporting avec Python et Power BI." },
+    { "id": 4, "title": "Ingénieur DevOps", "company": "CloudOne", "type": "CDI", "location": "Rabat", "salary": 14000, "experience": 4, "createdAt": "2026-10-05", "description": "Mise en place de pipelines CI/CD, conteneurisation Docker et déploiement Kubernetes." },
+    { "id": 5, "title": "Designer UI/UX", "company": "PixelLab", "type": "Freelance", "location": "À distance", "salary": 7000, "experience": 2, "createdAt": "2026-10-10", "description": "Maquettes Figma, design system et tests utilisateurs pour une application mobile." },
+    { "id": 6, "title": "Développeur Mobile Flutter", "company": "AppFactory", "type": "CDD", "location": "Tanger", "salary": 8500, "experience": 1, "createdAt": "2026-10-18", "description": "Développement d'applications mobiles multiplateformes avec Flutter." }
+  ]
+}
